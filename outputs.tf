@@ -14,3 +14,8 @@ output "web_bucket_endpoints" {
   }
   description = "Website endpoints for public web S3 buckets"
 }
+
+output "sops_kms_key_arn" {
+  description = "KMS key ARN for future SOPS AWS KMS recipients"
+  value       = aws_kms_key.sops.arn
+}
