@@ -24,3 +24,17 @@ output "github_actions_sops_kms_role_arn" {
   description = "IAM role ARN for GitHub Actions SOPS KMS access"
   value       = aws_iam_role.github_actions_sops_kms.arn
 }
+
+output "sops_secrets_operator_access_key" {
+  description = "Access key for the k3s sops-secrets-operator to decrypt SOPS AWS KMS secrets"
+  value = {
+    access_key_id     = aws_iam_access_key.sops_secrets_operator.id
+    secret_access_key = aws_iam_access_key.sops_secrets_operator.secret
+  }
+  sensitive = true
+}
+
+output "sops_secrets_operator_iam_user_arn" {
+  description = "IAM user ARN for the k3s sops-secrets-operator"
+  value       = aws_iam_user.sops_secrets_operator.arn
+}
