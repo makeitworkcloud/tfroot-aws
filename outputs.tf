@@ -19,3 +19,8 @@ output "sops_kms_key_arn" {
   description = "KMS key ARN for future SOPS AWS KMS recipients"
   value       = aws_kms_key.sops.arn
 }
+
+output "github_actions_sops_kms_role_arn" {
+  description = "IAM role ARN for GitHub Actions SOPS KMS access"
+  value       = aws_iam_role.github_actions_sops_kms.arn
+}
