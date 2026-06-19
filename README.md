@@ -24,6 +24,8 @@ No modules.
 | [aws_iam_access_key.admin_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key) | resource |
 | [aws_iam_user.admin](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user) | resource |
 | [aws_iam_user_policy_attachment.admin_attach](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy_attachment) | resource |
+| [aws_kms_alias.sops](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
+| [aws_kms_key.sops](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_s3_bucket.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket.public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket.web](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
@@ -43,5 +45,6 @@ No inputs.
 | Name | Description |
 | ---- | ----------- |
 | <a name="output_admin_access_keys"></a> [admin\_access\_keys](#output\_admin\_access\_keys) | Admin IAM user access keys |
+| <a name="output_sops_kms_key_arn"></a> [sops\_kms\_key\_arn](#output\_sops\_kms\_key\_arn) | KMS key ARN for future SOPS AWS KMS recipients |
 | <a name="output_web_bucket_endpoints"></a> [web\_bucket\_endpoints](#output\_web\_bucket\_endpoints) | Website endpoints for public web S3 buckets |
 <!-- END_TF_DOCS -->
