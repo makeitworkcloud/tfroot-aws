@@ -26,7 +26,7 @@ resource "aws_s3_bucket" "public" {
 
 resource "aws_s3_bucket_public_access_block" "public" {
   for_each                = aws_s3_bucket.public
-  bucket                  = each.value.id
+  bucket                  = each.value.bucket
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
@@ -36,7 +36,7 @@ resource "aws_s3_bucket_public_access_block" "public" {
 resource "aws_s3_bucket_policy" "public" {
   for_each = aws_s3_bucket.public
 
-  bucket = each.value.id
+  bucket = each.value.bucket
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -69,7 +69,7 @@ resource "aws_s3_bucket" "web" {
 # Make "web" buckets publicly accessible
 resource "aws_s3_bucket_public_access_block" "web" {
   for_each                = aws_s3_bucket.web
-  bucket                  = each.value.id
+  bucket                  = each.value.bucket
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
@@ -79,7 +79,7 @@ resource "aws_s3_bucket_public_access_block" "web" {
 resource "aws_s3_bucket_policy" "web" {
   for_each = aws_s3_bucket.web
 
-  bucket = each.value.id
+  bucket = each.value.bucket
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -99,7 +99,7 @@ resource "aws_s3_bucket_policy" "web" {
 resource "aws_s3_bucket_website_configuration" "web" {
   for_each = aws_s3_bucket.web
 
-  bucket = each.value.id
+  bucket = each.value.bucket
 
   index_document {
     suffix = "index.html"
