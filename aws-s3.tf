@@ -66,7 +66,8 @@ resource "aws_s3_bucket" "web" {
   }
 }
 
-# Make "web" buckets publicly accessible
+# S3 website endpoints cannot authenticate object requests. This access block
+# permits public controls; the following policy grants anonymous GetObject.
 resource "aws_s3_bucket_public_access_block" "web" {
   for_each                = aws_s3_bucket.web
   bucket                  = each.value.bucket
