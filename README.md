@@ -22,24 +22,33 @@ No modules.
 | Name | Type |
 | ---- | ---- |
 | [aws_iam_access_key.admin_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key) | resource |
+| [aws_iam_access_key.bedrock_opencode](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key) | resource |
 | [aws_iam_access_key.sops_secrets_operator](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key) | resource |
 | [aws_iam_openid_connect_provider.github_actions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider) | resource |
+| [aws_iam_role.bedrock_batch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role_policy.bedrock_batch_invoke](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.bedrock_batch_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_user.admin](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user) | resource |
+| [aws_iam_user.bedrock_opencode](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user) | resource |
 | [aws_iam_user.sops_secrets_operator](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user) | resource |
+| [aws_iam_user_policy.bedrock_opencode](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy) | resource |
 | [aws_iam_user_policy.sops_secrets_operator_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy) | resource |
 | [aws_iam_user_policy_attachment.admin_attach](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy_attachment) | resource |
 | [aws_kms_alias.sops](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
 | [aws_kms_key.sops](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
+| [aws_s3_bucket.bedrock_batch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket.public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket.web](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket_policy.public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_policy.web](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
+| [aws_s3_bucket_public_access_block.bedrock_batch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_public_access_block.public](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_public_access_block.web](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_website_configuration.web](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration) | resource |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [sops_file.secret_vars](https://registry.terraform.io/providers/carlpett/sops/latest/docs/data-sources/file) | data source |
 
 ## Inputs
@@ -51,6 +60,10 @@ No inputs.
 | Name | Description |
 | ---- | ----------- |
 | <a name="output_admin_access_keys"></a> [admin\_access\_keys](#output\_admin\_access\_keys) | Admin IAM user access keys |
+| <a name="output_bedrock_batch_bucket_name"></a> [bedrock\_batch\_bucket\_name](#output\_bedrock\_batch\_bucket\_name) | S3 bucket for Bedrock batch inference input and output data |
+| <a name="output_bedrock_batch_service_role_arn"></a> [bedrock\_batch\_service\_role\_arn](#output\_bedrock\_batch\_service\_role\_arn) | Service role ARN to pass as roleArn when creating Bedrock batch inference jobs |
+| <a name="output_bedrock_opencode_access_key"></a> [bedrock\_opencode\_access\_key](#output\_bedrock\_opencode\_access\_key) | Access key for OpenCode to invoke Anthropic models via AWS Bedrock |
+| <a name="output_bedrock_opencode_iam_user_arn"></a> [bedrock\_opencode\_iam\_user\_arn](#output\_bedrock\_opencode\_iam\_user\_arn) | IAM user ARN for OpenCode Bedrock access |
 | <a name="output_github_actions_sops_kms_role_arn"></a> [github\_actions\_sops\_kms\_role\_arn](#output\_github\_actions\_sops\_kms\_role\_arn) | IAM role ARN for GitHub Actions SOPS KMS access |
 | <a name="output_sops_kms_key_arn"></a> [sops\_kms\_key\_arn](#output\_sops\_kms\_key\_arn) | KMS key ARN for future SOPS AWS KMS recipients |
 | <a name="output_sops_secrets_operator_access_key"></a> [sops\_secrets\_operator\_access\_key](#output\_sops\_secrets\_operator\_access\_key) | Access key for the k3s sops-secrets-operator to decrypt SOPS AWS KMS secrets |

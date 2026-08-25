@@ -38,3 +38,27 @@ output "sops_secrets_operator_iam_user_arn" {
   description = "IAM user ARN for the k3s sops-secrets-operator"
   value       = aws_iam_user.sops_secrets_operator.arn
 }
+
+output "bedrock_opencode_access_key" {
+  description = "Access key for OpenCode to invoke Anthropic models via AWS Bedrock"
+  value = {
+    access_key_id     = aws_iam_access_key.bedrock_opencode.id
+    secret_access_key = aws_iam_access_key.bedrock_opencode.secret
+  }
+  sensitive = true
+}
+
+output "bedrock_opencode_iam_user_arn" {
+  description = "IAM user ARN for OpenCode Bedrock access"
+  value       = aws_iam_user.bedrock_opencode.arn
+}
+
+output "bedrock_batch_service_role_arn" {
+  description = "Service role ARN to pass as roleArn when creating Bedrock batch inference jobs"
+  value       = aws_iam_role.bedrock_batch.arn
+}
+
+output "bedrock_batch_bucket_name" {
+  description = "S3 bucket for Bedrock batch inference input and output data"
+  value       = aws_s3_bucket.bedrock_batch.bucket
+}
