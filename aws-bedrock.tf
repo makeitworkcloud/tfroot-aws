@@ -164,6 +164,21 @@ resource "aws_iam_user_policy" "bedrock_opencode" {
         Resource = "*"
       },
       {
+        # The Anthropic Messages API surface (the only one accepting
+        # service_tier for Claude) requires bearer-token auth. Short-term
+        # tokens are presigned client-side from this user's credentials;
+        # the condition keeps long-term API keys forbidden.
+        Sid      = "AllowShortTermBearerToken"
+        Effect   = "Allow"
+        Action   = ["bedrock:CallWithBearerToken"]
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "bedrock:bearerTokenType" = "SHORT_TERM"
+          }
+        }
+      },
+      {
         # Model access page is retired: first invoke auto-subscribes the
         # account, which Bedrock performs via AWS Marketplace on the caller's
         # behalf. Without this, new models fail with a marketplace denial.
