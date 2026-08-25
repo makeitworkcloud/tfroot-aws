@@ -164,6 +164,23 @@ resource "aws_iam_user_policy" "bedrock_opencode" {
         Resource = "*"
       },
       {
+        # Model access page is retired: first invoke auto-subscribes the
+        # account, which Bedrock performs via AWS Marketplace on the caller's
+        # behalf. Without this, new models fail with a marketplace denial.
+        Sid    = "MarketplaceModelSubscription"
+        Effect = "Allow"
+        Action = [
+          "aws-marketplace:ViewSubscriptions",
+          "aws-marketplace:Subscribe"
+        ]
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "aws:CalledViaLast" = "bedrock.amazonaws.com"
+          }
+        }
+      },
+      {
         Sid    = "BatchDataS3Access"
         Effect = "Allow"
         Action = [
