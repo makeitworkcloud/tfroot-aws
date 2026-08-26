@@ -8,6 +8,51 @@ output:
     {{ .Content }}
     <!-- END_TF_DOCS -->
 
+    ## AWS Bedrock batch inference (50% discount)
+
+    Batch inference bills at 50% of the on-demand Standard tier for
+    asynchronous workloads (results within 24h; small jobs finish in minutes).
+    Deployed resources: the `opencode-bedrock` IAM user, the
+    `bedrock-batch-inference` service role, and the `mitw-bedrock-batch` bucket.
+
+    1. Build a JSONL input file with **at least 100 records** (one model per job):
+
+       ```
+       {"recordId":"task-001","modelInput":{"anthropic_version":"bedrock-2023-05-31","max_tokens":2048,"messages":[{"role":"user","content":"..."}]}}
+       ```
+
+    2. Upload and submit (use a per-job input prefix so only this job's files
+       are processed):
+
+       ```bash
+       export AWS_PROFILE=opencode-bedrock AWS_REGION=us-west-2
+       aws s3 cp tasks.jsonl s3://mitw-bedrock-batch/input/my-job/tasks.jsonl
+       aws bedrock create-model-invocation-job \
+         --job-name "my-job-$(date +%s)" \
+         --role-arn "$(AWS_PROFILE=makeitwork tofu output -raw bedrock_batch_service_role_arn)" \
+         --model-id us.anthropic.claude-opus-4-6-v1 \
+         --input-data-config "s3InputDataConfig={s3Uri=s3://mitw-bedrock-batch/input/my-job/}" \
+         --output-data-config "s3OutputDataConfig={s3Uri=s3://mitw-bedrock-batch/output/}"
+       ```
+
+    3. Monitor until `Completed` (Submitted → Validating → Scheduled → InProgress):
+
+       ```bash
+       aws bedrock get-model-invocation-job --job-identifier "<jobArn>" --query status --output text
+       ```
+
+    4. Collect results and join outputs to inputs on `recordId`:
+
+       ```bash
+       aws s3 cp s3://mitw-bedrock-batch/output/<job-id>/ . --recursive
+       ```
+
+    Verify the discount in Cost Explorer (Service: Amazon Bedrock, group by
+    Usage Type): batch jobs appear as Batch usage at 50% of Standard.
+    Interactive sessions remain on-demand; use batch for bulk, latency-tolerant
+    work only. Models must be invocable by the account (currently Opus 4.6/4.5,
+    Sonnet 4.6/4.5).
+
 settings:
   color: false
   lockfile: false
