@@ -27,9 +27,13 @@ No modules.
 | [aws_iam_openid_connect_provider.github_actions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider) | resource |
 | [aws_iam_role.bedrock_batch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.opencode_mcp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.bedrock_batch_invoke](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.bedrock_batch_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.opencode_mcp_secrets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy_attachment.opencode_mcp_oauth](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
+| [aws_iam_role_policy_attachment.opencode_mcp_readonly](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_iam_user.admin](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user) | resource |
 | [aws_iam_user.bedrock_opencode](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user) | resource |
 | [aws_iam_user.sops_secrets_operator](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user) | resource |
@@ -65,9 +69,10 @@ No inputs.
 | <a name="output_bedrock_opencode_access_key"></a> [bedrock\_opencode\_access\_key](#output\_bedrock\_opencode\_access\_key) | Access key for OpenCode to invoke Anthropic models via AWS Bedrock |
 | <a name="output_bedrock_opencode_iam_user_arn"></a> [bedrock\_opencode\_iam\_user\_arn](#output\_bedrock\_opencode\_iam\_user\_arn) | IAM user ARN for OpenCode Bedrock access |
 | <a name="output_github_actions_sops_kms_role_arn"></a> [github\_actions\_sops\_kms\_role\_arn](#output\_github\_actions\_sops\_kms\_role\_arn) | IAM role ARN for GitHub Actions SOPS KMS access |
+| <a name="output_opencode_mcp_role_arn"></a> [opencode\_mcp\_role\_arn](#output\_opencode\_mcp\_role\_arn) | IAM role ARN for the managed AWS MCP Server |
 | <a name="output_sops_kms_key_arn"></a> [sops\_kms\_key\_arn](#output\_sops\_kms\_key\_arn) | KMS key ARN for future SOPS AWS KMS recipients |
 | <a name="output_sops_secrets_operator_access_key"></a> [sops\_secrets\_operator\_access\_key](#output\_sops\_secrets\_operator\_access\_key) | Access key for the k3s sops-secrets-operator to decrypt SOPS AWS KMS secrets |
-| <a name="output_sops_secrets_operator_iam_user_arn"></a> [sops\_secrets\_operator\_iam\_user\_arn](#output\_sops\_secrets\_operator\_iam\_user\_arn) | IAM user ARN for the k3s sops-secrets-operator |
+| <a name="output_sops_secrets_operator_iam_user_arn"></a> [sops\_secrets\_operator\_iam_user_arn](#output\_sops\_secrets\_operator\_iam_user_arn) | IAM user ARN for the k3s sops-secrets-operator |
 | <a name="output_web_bucket_endpoints"></a> [web\_bucket\_endpoints](#output\_web\_bucket\_endpoints) | Website endpoints for public web S3 buckets |
 <!-- END_TF_DOCS -->
 
