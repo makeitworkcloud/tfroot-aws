@@ -18,8 +18,38 @@ resource "aws_iam_access_key" "admin_key" {
   user     = aws_iam_user.admin[each.key].name
 }
 
+resource "aws_iam_user" "opencode_mcp_bootstrap" {
+  name          = "opencode-mcp-bootstrap"
+  force_destroy = false
+
+  tags = {
+    ManagedBy = "Terraform"
+    Purpose   = "opencode-mcp-bootstrap"
+  }
+}
+
+resource "aws_iam_access_key" "opencode_mcp_bootstrap" {
+  user = aws_iam_user.opencode_mcp_bootstrap.name
+}
+
+resource "aws_iam_user_policy" "opencode_mcp_bootstrap_assume_role" {
+  name = "opencode-mcp-assume-role"
+  user = aws_iam_user.opencode_mcp_bootstrap.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "sts:AssumeRole"
+        Resource = aws_iam_role.opencode_mcp.arn
+      }
+    ]
+  })
+}
+
 # AWS MCP Server OAuth uses the caller's IAM role. The Terraform automation
-# user is the only principal trusted to assume this purpose-built role.
+# and restricted bootstrap users are trusted to assume this purpose-built role.
 resource "aws_iam_role" "opencode_mcp" {
   name = "opencode-managed-mcp"
 
@@ -29,7 +59,10 @@ resource "aws_iam_role" "opencode_mcp" {
       {
         Effect = "Allow"
         Principal = {
-          AWS = aws_iam_user.admin["svc-terraform-admin"].arn
+          AWS = [
+            aws_iam_user.admin["svc-terraform-admin"].arn,
+            aws_iam_user.opencode_mcp_bootstrap.arn
+          ]
         }
         Action = "sts:AssumeRole"
       }
