@@ -74,9 +74,9 @@ resource "aws_iam_role_policy" "opencode_mcp_secrets" {
         Resource = "*"
       },
       {
-        Sid    = "DecryptSecretsManagerSecrets"
-        Effect = "Allow"
-        Action = ["kms:Decrypt"]
+        Sid      = "DecryptSecretsManagerSecrets"
+        Effect   = "Allow"
+        Action   = ["kms:Decrypt"]
         Resource = "*"
         Condition = {
           StringLike = {
