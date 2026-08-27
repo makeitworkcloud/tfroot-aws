@@ -7,6 +7,15 @@ output "admin_access_keys" {
   sensitive = true
 }
 
+output "opencode_mcp_bootstrap_access_key" {
+  description = "Access key for the restricted OpenCode MCP bootstrap user"
+  value = {
+    access_key_id     = aws_iam_access_key.opencode_mcp_bootstrap.id
+    secret_access_key = aws_iam_access_key.opencode_mcp_bootstrap.secret
+  }
+  sensitive = true
+}
+
 output "web_bucket_endpoints" {
   value = {
     for k, b in aws_s3_bucket.web :
