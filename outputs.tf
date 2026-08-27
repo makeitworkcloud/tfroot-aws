@@ -25,6 +25,11 @@ output "github_actions_sops_kms_role_arn" {
   value       = aws_iam_role.github_actions_sops_kms.arn
 }
 
+output "opencode_mcp_role_arn" {
+  description = "IAM role ARN for the managed AWS MCP Server"
+  value       = aws_iam_role.opencode_mcp.arn
+}
+
 output "sops_secrets_operator_access_key" {
   description = "Access key for the k3s sops-secrets-operator to decrypt SOPS AWS KMS secrets"
   value = {
