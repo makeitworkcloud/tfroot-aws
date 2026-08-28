@@ -28,12 +28,14 @@ No modules.
 | [aws_iam_openid_connect_provider.github_actions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider) | resource |
 | [aws_iam_role.bedrock_batch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_chart_updater](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.github_actions_opentofu_docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_repository_sync](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.opencode_mcp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.bedrock_batch_invoke](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.bedrock_batch_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_chart_updater](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.github_actions_opentofu_docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_repository_sync](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.opencode_mcp_secrets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
@@ -80,7 +82,7 @@ No inputs.
 | <a name="output_opencode_mcp_role_arn"></a> [opencode\_mcp\_role\_arn](#output\_opencode\_mcp\_role\_arn) | IAM role ARN for the managed AWS MCP Server |
 | <a name="output_sops_kms_key_arn"></a> [sops\_kms\_key\_arn](#output\_sops\_kms\_key\_arn) | KMS key ARN for future SOPS AWS KMS recipients |
 | <a name="output_sops_secrets_operator_access_key"></a> [sops\_secrets\_operator\_access\_key](#output\_sops\_secrets\_operator\_access\_key) | Access key for the k3s sops-secrets-operator to decrypt SOPS AWS KMS secrets |
-| <a name="output_sops_secrets_operator_iam_user_arn"></a> [sops\_secrets\_operator\_iam\_user\_arn](#output\_sops\_secrets\_operator\_iam\_user\_arn) | IAM user ARN for the k3s sops-secrets-operator |
+| <a name="output_sops_secrets_operator_iam_user_arn"></a> [sops\_secrets\_operator\_iam\_user_arn](#output\_sops\_secrets\_operator\_iam_user_arn) | IAM user ARN for the k3s sops-secrets-operator |
 | <a name="output_web_bucket_endpoints"></a> [web\_bucket\_endpoints](#output\_web\_bucket\_endpoints) | Website endpoints for public web S3 buckets |
 <!-- END_TF_DOCS -->
 
@@ -108,7 +110,7 @@ Deployed resources: the `opencode-bedrock` IAM user, the
      --role-arn "$(AWS_PROFILE=makeitwork tofu output -raw bedrock_batch_service_role_arn)" \
      --model-id us.anthropic.claude-opus-4-6-v1 \
      --input-data-config "s3InputDataConfig={s3Uri=s3://mitw-bedrock-batch/input/my-job/}" \
-     --output-data-config "s3OutputDataConfig={s3Uri=s3://mitw-bedrock-batch/output/}"
+     --output-data-config "s3OutputDataConfig={s3Uri=s3://mitw-bedrock-batch/output/my-job/}"
    ```
 
 3. Monitor until `Completed` (Submitted → Validating → Scheduled → InProgress):
@@ -128,3 +130,4 @@ Usage Type): batch jobs appear as Batch usage at 50% of Standard.
 Interactive sessions remain on-demand; use batch for bulk, latency-tolerant
 work only. Models must be invocable by the account (currently Opus 4.6/4.5,
 Sonnet 4.6/4.5).
+
