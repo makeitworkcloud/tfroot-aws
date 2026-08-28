@@ -8,7 +8,8 @@ locals {
     "mitw-tf-aws-infra",
     "mitw-tf-cloudflare-infra",
     "mitw-tf-github-repos",
-    "mitw-tf-libvirt-infra"
+    "mitw-tf-libvirt-infra",
+    "mitw-tf-namecheap-infra"
   ])
   s3_public_buckets = toset([])
   s3_web_buckets = toset([
