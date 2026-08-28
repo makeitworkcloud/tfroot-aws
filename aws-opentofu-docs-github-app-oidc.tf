@@ -1,6 +1,7 @@
 # Allows trusted same-repository OpenTofu pull requests to mint a short-lived
 # GitHub App token for committing generated Terraform documentation. App-authored
-# commits trigger fresh pull-request checks, unlike commits made with GITHUB_TOKEN.
+# generated-doc commits trigger normal pull-request validation on their resulting
+# SHA, unlike commits made with GITHUB_TOKEN.
 resource "aws_iam_role" "github_actions_opentofu_docs" {
   name = "github-actions-opentofu-docs"
 
