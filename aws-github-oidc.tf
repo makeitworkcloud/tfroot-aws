@@ -70,7 +70,9 @@ resource "aws_iam_role_policy" "github_actions_sops_kms" {
   })
 }
 
-# The post-publish chart workflow may assume this role only from charts/main.
+# This dedicated role prevents the chart workflow from gaining the broader
+# SOPS KMS permissions used by OpenTofu roots.
+# The post-publish chart workflow may assume it only from charts/main.
 # It can read exactly one GitHub App private key, used only to mint a
 # short-lived installation token scoped to kustomize-cluster.
 resource "aws_iam_role" "github_actions_chart_updater" {
