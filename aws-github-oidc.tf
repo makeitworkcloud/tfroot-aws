@@ -35,7 +35,8 @@ resource "aws_iam_role" "github_actions_sops_kms" {
               "repo:makeitworkcloud/tfroot-aws:*",
               "repo:makeitworkcloud/tfroot-cloudflare:*",
               "repo:makeitworkcloud/tfroot-github:*",
-              "repo:makeitworkcloud/tfroot-libvirt:*"
+              "repo:makeitworkcloud/tfroot-libvirt:*",
+              "repo:makeitworkcloud/tfroot-namecheap:*"
             ]
           }
         }
