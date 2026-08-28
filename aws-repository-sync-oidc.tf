@@ -1,6 +1,8 @@
 # Allows only the central repository-sync workflow on tfroot-github/main to
 # retrieve the existing organization GitHub App key. The App opens protected
 # branch pull requests; it never writes target default branches directly.
+# Its installation token is limited in the workflow to Contents, Pull requests,
+# and Workflows permissions required to prepare those PRs.
 resource "aws_iam_role" "github_actions_repository_sync" {
   name = "github-actions-repository-sync"
 
