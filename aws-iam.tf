@@ -129,6 +129,26 @@ resource "aws_iam_role_policy" "opencode_mcp_secrets" {
   })
 }
 
+# The managed MCP role retains read-only discovery access and gains object
+# upload only under the dedicated artifact-delivery prefix. No state bucket is
+# writable by this policy.
+resource "aws_iam_role_policy" "opencode_mcp_agent_pipe" {
+  name = "opencode-managed-mcp-agent-pipe"
+  role = aws_iam_role.opencode_mcp.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "WriteAgentPipeDeliveries"
+        Effect   = "Allow"
+        Action   = ["s3:PutObject"]
+        Resource = "${aws_s3_bucket.agent_pipe.arn}/${local.agent_pipe_delivery_prefix}*"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_user" "sops_secrets_operator" {
   name          = "sops-secrets-operator"
   force_destroy = false
