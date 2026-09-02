@@ -106,3 +106,67 @@ resource "aws_s3_bucket_website_configuration" "web" {
     suffix = "index.html"
   }
 }
+
+# agent-pipe contains only short-lived, non-secret files intended for a user to
+# download through a presigned URL. It is intentionally separate from the
+# OpenTofu state buckets listed in local.s3_private_buckets.
+resource "aws_s3_bucket" "agent_pipe" {
+  bucket = local.agent_pipe_bucket
+
+  tags = {
+    ManagedBy = "Terraform"
+    Purpose   = "agent-artifact-delivery"
+  }
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "agent_pipe" {
+  bucket = aws_s3_bucket.agent_pipe.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_ownership_controls" "agent_pipe" {
+  bucket = aws_s3_bucket.agent_pipe.id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "agent_pipe" {
+  bucket = aws_s3_bucket.agent_pipe.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "agent_pipe" {
+  bucket = aws_s3_bucket.agent_pipe.id
+
+  rule {
+    id     = "expire-agent-deliveries"
+    status = "Enabled"
+
+    filter {
+      prefix = local.agent_pipe_delivery_prefix
+    }
+
+    expiration {
+      days = 1
+    }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 1
+    }
+  }
+}

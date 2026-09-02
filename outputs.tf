@@ -24,6 +24,16 @@ output "web_bucket_endpoints" {
   description = "Website endpoints for public web S3 buckets"
 }
 
+output "agent_pipe_bucket_name" {
+  description = "Private S3 bucket for short-lived agent-to-user artifact delivery"
+  value       = aws_s3_bucket.agent_pipe.bucket
+}
+
+output "agent_pipe_delivery_prefix" {
+  description = "Object-key prefix permitted for managed OpenCode artifact delivery"
+  value       = local.agent_pipe_delivery_prefix
+}
+
 output "sops_kms_key_arn" {
   description = "KMS key ARN for future SOPS AWS KMS recipients"
   value       = aws_kms_key.sops.arn
@@ -49,7 +59,7 @@ output "sops_secrets_operator_access_key" {
 }
 
 output "sops_secrets_operator_iam_user_arn" {
-  description = "IAM user ARN for the k3s sops-secrets-operator"
+  description = "IAM user ARN for the k3s sops-secrets-operator to decrypt SOPS AWS KMS secrets"
   value       = aws_iam_user.sops_secrets_operator.arn
 }
 
