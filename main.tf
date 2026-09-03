@@ -3,9 +3,9 @@ data "sops_file" "secret_vars" {
 }
 
 locals {
-  admin_users                 = toset(["svc-terraform-admin"])
-  agent_pipe_bucket           = "agent-pipe"
-  agent_pipe_delivery_prefix  = "deliveries/"
+  admin_users                  = toset(["svc-terraform-admin"])
+  agent_pipe_bucket            = "agent-pipe"
+  agent_pipe_delivery_prefix   = "deliveries/"
   channel_project_state_bucket = "mitw-tf-channel-project"
   channel_project_state_keys = toset([
     "tofu/cloudflare/terraform.tfstate",
