@@ -90,7 +90,8 @@ resource "aws_iam_role" "github_actions_channel_project_state" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:makeitworkcloud/channel-project:*"
+            # This repository emits the organization/repository ID subject form.
+            "token.actions.githubusercontent.com:sub" = "repo:makeitworkcloud@195502628/channel-project@1355525330:*"
           }
         }
       }
