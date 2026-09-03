@@ -70,3 +70,74 @@ resource "aws_iam_role_policy" "github_actions_sops_kms" {
     ]
   })
 }
+
+# This role is intentionally separate from the multi-root SOPS role. Only
+# channel-project workflows can read or write the two project state objects.
+resource "aws_iam_role" "github_actions_channel_project_state" {
+  name = "github-actions-channel-project-state"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.github_actions.arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+          }
+          StringLike = {
+            "token.actions.githubusercontent.com:sub" = "repo:makeitworkcloud/channel-project:*"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = {
+    ManagedBy = "Terraform"
+    Purpose   = "channel-project-opentofu-state"
+  }
+}
+
+resource "aws_iam_role_policy" "github_actions_channel_project_state" {
+  name = "channel-project-opentofu-state"
+  role = aws_iam_role.github_actions_channel_project_state.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "DecryptChannelProjectSops"
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+          "kms:DescribeKey"
+        ]
+        Resource = aws_kms_key.sops.arn
+      },
+      {
+        Sid      = "ListChannelProjectStateBucket"
+        Effect   = "Allow"
+        Action   = ["s3:ListBucket"]
+        Resource = aws_s3_bucket.private[local.channel_project_state_bucket].arn
+      },
+      {
+        Sid    = "ManageChannelProjectStateObjects"
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = concat(
+          [for key in local.channel_project_state_keys : "${aws_s3_bucket.private[local.channel_project_state_bucket].arn}/${key}"],
+          [for key in local.channel_project_state_keys : "${aws_s3_bucket.private[local.channel_project_state_bucket].arn}/${key}.tflock"],
+        )
+      }
+    ]
+  })
+}

@@ -34,6 +34,16 @@ output "agent_pipe_delivery_prefix" {
   value       = local.agent_pipe_delivery_prefix
 }
 
+output "channel_project_state_bucket_name" {
+  description = "Versioned private S3 bucket for channel-project OpenTofu state"
+  value       = aws_s3_bucket.private[local.channel_project_state_bucket].bucket
+}
+
+output "channel_project_github_actions_role_arn" {
+  description = "GitHub OIDC role for channel-project OpenTofu state and SOPS decrypt access"
+  value       = aws_iam_role.github_actions_channel_project_state.arn
+}
+
 output "sops_kms_key_arn" {
   description = "KMS key ARN for future SOPS AWS KMS recipients"
   value       = aws_kms_key.sops.arn
