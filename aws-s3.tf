@@ -11,6 +11,43 @@ resource "aws_s3_bucket" "private" {
   }
 }
 
+# channel-project uses a dedicated, versioned state bucket. Its two state keys
+# are consumed only by the project-specific OpenTofu roots through GitHub OIDC.
+resource "aws_s3_bucket_public_access_block" "channel_project_state" {
+  bucket = aws_s3_bucket.private[local.channel_project_state_bucket].id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_ownership_controls" "channel_project_state" {
+  bucket = aws_s3_bucket.private[local.channel_project_state_bucket].id
+
+  rule {
+    object_ownership = "BucketOwnerEnforced"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "channel_project_state" {
+  bucket = aws_s3_bucket.private[local.channel_project_state_bucket].id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "channel_project_state" {
+  bucket = aws_s3_bucket.private[local.channel_project_state_bucket].id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 resource "aws_s3_bucket" "public" {
   for_each = local.s3_public_buckets
   bucket   = each.value
