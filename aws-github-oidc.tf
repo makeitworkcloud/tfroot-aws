@@ -124,14 +124,6 @@ resource "aws_iam_role_policy" "github_actions_channel_project_state" {
         Effect   = "Allow"
         Action   = ["s3:ListBucket"]
         Resource = aws_s3_bucket.private[local.channel_project_state_bucket].arn
-        Condition = {
-          StringLike = {
-            "s3:prefix" = concat(
-              [for key in local.channel_project_state_keys : key],
-              [for key in local.channel_project_state_keys : "${key}.tflock"],
-            )
-          }
-        }
       },
       {
         Sid    = "ManageChannelProjectStateObjects"
