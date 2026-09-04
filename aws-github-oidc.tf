@@ -234,6 +234,7 @@ resource "aws_iam_role_policy" "github_actions_channel_project_site_infrastructu
           "s3:GetBucketPublicAccessBlock",
           "s3:GetBucketTagging",
           "s3:GetBucketVersioning",
+          "s3:ListBucket",
           "s3:PutBucketAcl",
           "s3:PutBucketEncryption",
           "s3:PutBucketLifecycleConfiguration",
