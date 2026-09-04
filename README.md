@@ -27,11 +27,15 @@ No modules.
 | [aws_iam_access_key.sops_secrets_operator](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key) | resource |
 | [aws_iam_openid_connect_provider.github_actions](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_openid_connect_provider) | resource |
 | [aws_iam_role.bedrock_batch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.github_actions_channel_project_site_deploy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.github_actions_channel_project_site_infrastructure](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_channel_project_state](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.opencode_mcp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.bedrock_batch_invoke](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.bedrock_batch_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.github_actions_channel_project_site_deploy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.github_actions_channel_project_site_infrastructure](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_channel_project_state](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.opencode_mcp_agent_pipe](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
@@ -86,6 +90,8 @@ No inputs.
 | <a name="output_bedrock_opencode_access_key"></a> [bedrock\_opencode\_access\_key](#output\_bedrock\_opencode\_access\_key) | Access key for OpenCode to invoke Anthropic models via AWS Bedrock |
 | <a name="output_bedrock_opencode_iam_user_arn"></a> [bedrock\_opencode\_iam\_user\_arn](#output\_bedrock\_opencode\_iam\_user\_arn) | IAM user ARN for OpenCode Bedrock access |
 | <a name="output_channel_project_github_actions_role_arn"></a> [channel\_project\_github\_actions\_role\_arn](#output\_channel\_project\_github\_actions\_role\_arn) | GitHub OIDC role for channel-project OpenTofu state and SOPS decrypt access |
+| <a name="output_channel_project_site_deploy_role_arn"></a> [channel\_project\_site\_deploy\_role\_arn](#output\_channel\_project\_site\_deploy\_role\_arn) | GitHub OIDC role for publishing channel-project static-site assets from main |
+| <a name="output_channel_project_site_infrastructure_role_arn"></a> [channel\_project\_site\_infrastructure\_role\_arn](#output\_channel\_project\_site\_infrastructure\_role\_arn) | GitHub OIDC role for channel-project static-site OpenTofu roots |
 | <a name="output_channel_project_state_bucket_name"></a> [channel\_project\_state\_bucket\_name](#output\_channel\_project\_state\_bucket\_name) | Versioned private S3 bucket for channel-project OpenTofu state |
 | <a name="output_github_actions_sops_kms_role_arn"></a> [github\_actions\_sops\_kms\_role\_arn](#output\_github\_actions\_sops\_kms\_role\_arn) | IAM role ARN for GitHub Actions SOPS KMS access |
 | <a name="output_opencode_mcp_bootstrap_access_key"></a> [opencode\_mcp\_bootstrap\_access\_key](#output\_opencode\_mcp\_bootstrap\_access\_key) | Access key for the restricted OpenCode MCP bootstrap user |
