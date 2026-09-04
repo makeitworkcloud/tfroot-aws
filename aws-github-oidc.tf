@@ -295,6 +295,47 @@ resource "aws_iam_role_policy" "github_actions_channel_project_site_infrastructu
           "cloudfront:ListResponseHeadersPolicies"
         ]
         Resource = "*"
+      },
+      {
+        Sid    = "ManageVendedLogDeliveries"
+        Effect = "Allow"
+        Action = [
+          "logs:CreateDelivery",
+          "logs:DeleteDelivery",
+          "logs:DeleteDeliveryDestination",
+          "logs:DeleteDeliveryDestinationPolicy",
+          "logs:DeleteDeliverySource",
+          "logs:GetDelivery",
+          "logs:GetDeliveryDestination",
+          "logs:GetDeliveryDestinationPolicy",
+          "logs:GetDeliverySource",
+          "logs:PutDeliveryDestination",
+          "logs:PutDeliveryDestinationPolicy",
+          "logs:PutDeliverySource",
+          "logs:UpdateDeliveryConfiguration"
+        ]
+        Resource = [
+          "arn:aws:logs:us-east-1:${data.aws_caller_identity.current.account_id}:delivery:*",
+          "arn:aws:logs:us-east-1:${data.aws_caller_identity.current.account_id}:delivery-source:*",
+          "arn:aws:logs:us-east-1:${data.aws_caller_identity.current.account_id}:delivery-destination:*"
+        ]
+      },
+      {
+        Sid    = "DescribeVendedLogDeliveries"
+        Effect = "Allow"
+        Action = [
+          "logs:DescribeConfigurationTemplates",
+          "logs:DescribeDeliveries",
+          "logs:DescribeDeliveryDestinations",
+          "logs:DescribeDeliverySources"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid      = "AuthorizeSiteVendedLogDelivery"
+        Effect   = "Allow"
+        Action   = ["cloudfront:AllowVendedLogDeliveryForResource"]
+        Resource = ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"]
       }
     ]
   })
