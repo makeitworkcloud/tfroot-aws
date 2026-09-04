@@ -54,6 +54,16 @@ output "channel_project_site_deploy_role_arn" {
   value       = aws_iam_role.github_actions_channel_project_site_deploy.arn
 }
 
+output "twilio_state_bucket_name" {
+  description = "Versioned private S3 bucket for tfroot-twilio OpenTofu state"
+  value       = aws_s3_bucket.private[local.twilio_state_bucket].bucket
+}
+
+output "twilio_github_actions_state_role_arn" {
+  description = "GitHub OIDC role for tfroot-twilio OpenTofu state and SOPS decrypt access"
+  value       = aws_iam_role.github_actions_twilio_state.arn
+}
+
 output "sops_kms_key_arn" {
   description = "KMS key ARN for future SOPS AWS KMS recipients"
   value       = aws_kms_key.sops.arn
