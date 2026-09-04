@@ -3,11 +3,14 @@ data "sops_file" "secret_vars" {
 }
 
 locals {
-  admin_users                  = toset(["svc-terraform-admin"])
-  agent_pipe_bucket            = "agent-pipe"
-  agent_pipe_delivery_prefix   = "deliveries/"
-  channel_project_state_bucket = "mitw-tf-channel-project"
+  admin_users                         = toset(["svc-terraform-admin"])
+  agent_pipe_bucket                   = "agent-pipe"
+  agent_pipe_delivery_prefix          = "deliveries/"
+  channel_project_state_bucket        = "mitw-tf-channel-project"
+  channel_project_site_bucket         = "orthodox-channel-site-332355796717"
+  channel_project_site_log_bucket     = "orthodox-channel-site-logs-332355796717"
   channel_project_state_keys = toset([
+    "tofu/aws/terraform.tfstate",
     "tofu/cloudflare/terraform.tfstate",
     "tofu/namecheap/terraform.tfstate",
   ])

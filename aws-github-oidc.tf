@@ -73,7 +73,7 @@ resource "aws_iam_role_policy" "github_actions_sops_kms" {
 }
 
 # This role is intentionally separate from the multi-root SOPS role. Only
-# channel-project workflows can read or write the two project state objects.
+# channel-project workflows can read or write the project's OpenTofu states.
 resource "aws_iam_role" "github_actions_channel_project_state" {
   name = "github-actions-channel-project-state"
 
@@ -139,6 +139,220 @@ resource "aws_iam_role_policy" "github_actions_channel_project_state" {
           [for key in local.channel_project_state_keys : "${aws_s3_bucket.private[local.channel_project_state_bucket].arn}/${key}"],
           [for key in local.channel_project_state_keys : "${aws_s3_bucket.private[local.channel_project_state_bucket].arn}/${key}.tflock"],
         )
+      }
+    ]
+  })
+}
+
+# This role is for channel-project OpenTofu roots. It includes that
+# repository's state access and only the AWS control-plane permissions needed
+# to own the private holding-site origin and its CloudFront distribution.
+resource "aws_iam_role" "github_actions_channel_project_site_infrastructure" {
+  name = "github-actions-channel-project-site-infrastructure"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.github_actions.arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+          }
+          StringLike = {
+            "token.actions.githubusercontent.com:sub" = "repo:makeitworkcloud@195502628/channel-project@1355525330:*"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = {
+    ManagedBy = "Terraform"
+    Purpose   = "channel-project-site-infrastructure"
+  }
+}
+
+resource "aws_iam_role_policy" "github_actions_channel_project_site_infrastructure" {
+  name = "channel-project-site-infrastructure"
+  role = aws_iam_role.github_actions_channel_project_site_infrastructure.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "ListChannelProjectStateBucket"
+        Effect   = "Allow"
+        Action   = ["s3:ListBucket"]
+        Resource = aws_s3_bucket.private[local.channel_project_state_bucket].arn
+      },
+      {
+        Sid    = "ManageChannelProjectStateObjects"
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = concat(
+          [for key in local.channel_project_state_keys : "${aws_s3_bucket.private[local.channel_project_state_bucket].arn}/${key}"],
+          [for key in local.channel_project_state_keys : "${aws_s3_bucket.private[local.channel_project_state_bucket].arn}/${key}.tflock"],
+        )
+      },
+      {
+        Sid    = "DiscoverBuckets"
+        Effect = "Allow"
+        Action = [
+          "s3:ListAllMyBuckets"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "CreateSiteBuckets"
+        Effect = "Allow"
+        Action = [
+          "s3:CreateBucket"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "ManageSiteBuckets"
+        Effect = "Allow"
+        Action = [
+          "s3:DeleteBucket",
+          "s3:DeleteBucketPolicy",
+          "s3:GetBucketAcl",
+          "s3:GetBucketEncryption",
+          "s3:GetBucketLifecycleConfiguration",
+          "s3:GetBucketLocation",
+          "s3:GetBucketOwnershipControls",
+          "s3:GetBucketPolicy",
+          "s3:GetBucketPublicAccessBlock",
+          "s3:GetBucketTagging",
+          "s3:GetBucketVersioning",
+          "s3:PutBucketAcl",
+          "s3:PutBucketEncryption",
+          "s3:PutBucketLifecycleConfiguration",
+          "s3:PutBucketOwnershipControls",
+          "s3:PutBucketPolicy",
+          "s3:PutBucketPublicAccessBlock",
+          "s3:PutBucketTagging",
+          "s3:PutBucketVersioning"
+        ]
+        Resource = [
+          "arn:aws:s3:::${local.channel_project_site_bucket}",
+          "arn:aws:s3:::${local.channel_project_site_log_bucket}"
+        ]
+      },
+      {
+        Sid    = "ManageSiteOriginAccessControl"
+        Effect = "Allow"
+        Action = [
+          "cloudfront:CreateOriginAccessControl",
+          "cloudfront:DeleteOriginAccessControl",
+          "cloudfront:GetOriginAccessControl",
+          "cloudfront:GetOriginAccessControlConfig",
+          "cloudfront:ListOriginAccessControls",
+          "cloudfront:UpdateOriginAccessControl"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "ManageSiteDistribution"
+        Effect = "Allow"
+        Action = [
+          "cloudfront:CreateDistribution",
+          "cloudfront:DeleteDistribution",
+          "cloudfront:GetDistribution",
+          "cloudfront:GetDistributionConfig",
+          "cloudfront:ListDistributions",
+          "cloudfront:ListTagsForResource",
+          "cloudfront:TagResource",
+          "cloudfront:UntagResource",
+          "cloudfront:UpdateDistribution"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "ReadManagedCloudFrontPolicies"
+        Effect = "Allow"
+        Action = [
+          "cloudfront:GetCachePolicy",
+          "cloudfront:GetResponseHeadersPolicy",
+          "cloudfront:ListCachePolicies",
+          "cloudfront:ListResponseHeadersPolicies"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Site publication is separate from infrastructure management and is trusted
+# only from channel-project's main branch. It cannot manage state or create
+# infrastructure resources.
+resource "aws_iam_role" "github_actions_channel_project_site_deploy" {
+  name = "github-actions-channel-project-site-deploy"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.github_actions.arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+            "token.actions.githubusercontent.com:sub" = "repo:makeitworkcloud@195502628/channel-project@1355525330:ref:refs/heads/main"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = {
+    ManagedBy = "Terraform"
+    Purpose   = "channel-project-site-deployment"
+  }
+}
+
+resource "aws_iam_role_policy" "github_actions_channel_project_site_deploy" {
+  name = "channel-project-site-deployment"
+  role = aws_iam_role.github_actions_channel_project_site_deploy.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "ListSiteAssetBucket"
+        Effect   = "Allow"
+        Action   = ["s3:ListBucket"]
+        Resource = "arn:aws:s3:::${local.channel_project_site_bucket}"
+      },
+      {
+        Sid    = "PublishSiteAssets"
+        Effect = "Allow"
+        Action = [
+          "s3:AbortMultipartUpload",
+          "s3:DeleteObject",
+          "s3:GetObject",
+          "s3:ListMultipartUploadParts",
+          "s3:PutObject"
+        ]
+        Resource = "arn:aws:s3:::${local.channel_project_site_bucket}/*"
+      },
+      {
+        Sid      = "InvalidateSiteDistribution"
+        Effect   = "Allow"
+        Action   = ["cloudfront:CreateInvalidation"]
+        Resource = "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"
       }
     ]
   })

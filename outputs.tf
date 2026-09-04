@@ -44,6 +44,16 @@ output "channel_project_github_actions_role_arn" {
   value       = aws_iam_role.github_actions_channel_project_state.arn
 }
 
+output "channel_project_site_infrastructure_role_arn" {
+  description = "GitHub OIDC role for channel-project static-site OpenTofu roots"
+  value       = aws_iam_role.github_actions_channel_project_site_infrastructure.arn
+}
+
+output "channel_project_site_deploy_role_arn" {
+  description = "GitHub OIDC role for publishing channel-project static-site assets from main"
+  value       = aws_iam_role.github_actions_channel_project_site_deploy.arn
+}
+
 output "sops_kms_key_arn" {
   description = "KMS key ARN for future SOPS AWS KMS recipients"
   value       = aws_kms_key.sops.arn
