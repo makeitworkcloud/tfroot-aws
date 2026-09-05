@@ -28,6 +28,7 @@ locals {
   s3_public_buckets = toset([])
   s3_web_buckets = toset([
     "makeitwork.cloud",
-    "onion.makeitwork.cloud"
+    "onion.makeitwork.cloud",
+    "orthodox.channel",
   ])
 }
