@@ -406,3 +406,63 @@ resource "aws_iam_role_policy" "github_actions_channel_project_site_deploy" {
     ]
   })
 }
+
+# Site publication is separate from infrastructure management and is trusted
+# only from xnoto.dev's main branch. It can publish assets but cannot manage
+# state, infrastructure resources, or CloudFront distributions.
+resource "aws_iam_role" "github_actions_xnoto_dev_site_deploy" {
+  name = "github-actions-xnoto-dev-site-deploy"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.github_actions.arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+            "token.actions.githubusercontent.com:sub" = "repo:xnoto@121333299/xnoto.dev@1358381234:ref:refs/heads/main"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = {
+    ManagedBy = "Terraform"
+    Purpose   = "xnoto-dev-site-deployment"
+  }
+}
+
+resource "aws_iam_role_policy" "github_actions_xnoto_dev_site_deploy" {
+  name = "xnoto-dev-site-deployment"
+  role = aws_iam_role.github_actions_xnoto_dev_site_deploy.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "ListSiteAssetBucket"
+        Effect   = "Allow"
+        Action   = ["s3:ListBucket"]
+        Resource = "arn:aws:s3:::xnoto.dev"
+      },
+      {
+        Sid    = "PublishSiteAssets"
+        Effect = "Allow"
+        Action = [
+          "s3:AbortMultipartUpload",
+          "s3:DeleteObject",
+          "s3:GetObject",
+          "s3:ListMultipartUploadParts",
+          "s3:PutObject"
+        ]
+        Resource = "arn:aws:s3:::xnoto.dev/*"
+      }
+    ]
+  })
+}

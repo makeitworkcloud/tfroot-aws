@@ -32,6 +32,7 @@ No modules.
 | [aws_iam_role.github_actions_channel_project_state](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_twilio_state](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.github_actions_xnoto_dev_site_deploy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.opencode_mcp](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role_policy.bedrock_batch_invoke](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.bedrock_batch_s3](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
@@ -43,6 +44,7 @@ No modules.
 | [aws_iam_role_policy.github_actions_channel_project_state](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_twilio_state](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.github_actions_xnoto_dev_site_deploy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.opencode_mcp_agent_pipe](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.opencode_mcp_secrets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy_attachment.opencode_mcp_oauth](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
@@ -111,6 +113,7 @@ No inputs.
 | <a name="output_twilio_github_actions_state_role_arn"></a> [twilio\_github\_actions\_state\_role\_arn](#output\_twilio\_github\_actions\_state\_role\_arn) | GitHub OIDC role for tfroot-twilio OpenTofu state and SOPS decrypt access |
 | <a name="output_twilio_state_bucket_name"></a> [twilio\_state\_bucket\_name](#output\_twilio\_state\_bucket\_name) | Versioned private S3 bucket for tfroot-twilio OpenTofu state |
 | <a name="output_web_bucket_endpoints"></a> [web\_bucket\_endpoints](#output\_web\_bucket\_endpoints) | Website endpoints for public web S3 buckets |
+| <a name="output_xnoto_dev_site_deploy_role_arn"></a> [xnoto\_dev\_site\_deploy\_role\_arn](#output\_xnoto\_dev\_site\_deploy\_role\_arn) | GitHub OIDC role for publishing xnoto.dev static-site assets from main |
 <!-- END_TF_DOCS -->
 
 ## AWS Bedrock batch inference (50% discount)

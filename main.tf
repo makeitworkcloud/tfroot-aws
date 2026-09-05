@@ -30,5 +30,6 @@ locals {
     "makeitwork.cloud",
     "onion.makeitwork.cloud",
     "orthodox.channel",
+    "xnoto.dev",
   ])
 }

@@ -54,6 +54,11 @@ output "channel_project_site_deploy_role_arn" {
   value       = aws_iam_role.github_actions_channel_project_site_deploy.arn
 }
 
+output "xnoto_dev_site_deploy_role_arn" {
+  description = "GitHub OIDC role for publishing xnoto.dev static-site assets from main"
+  value       = aws_iam_role.github_actions_xnoto_dev_site_deploy.arn
+}
+
 output "twilio_state_bucket_name" {
   description = "Versioned private S3 bucket for tfroot-twilio OpenTofu state"
   value       = aws_s3_bucket.private[local.twilio_state_bucket].bucket
