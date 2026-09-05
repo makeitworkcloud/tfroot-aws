@@ -94,7 +94,7 @@ output "sops_secrets_operator_access_key" {
 }
 
 output "sops_secrets_operator_iam_user_arn" {
-  description = "IAM user ARN for the k3s sops-secrets-operator"
+  description = "IAM user ARN for the sops-secrets-operator"
   value       = aws_iam_user.sops_secrets_operator.arn
 }
 
@@ -108,7 +108,7 @@ output "bedrock_opencode_access_key" {
 }
 
 output "bedrock_opencode_iam_user_arn" {
-  description = "IAM user ARN for OpenCode to invoke Anthropic models via Bedrock"
+  description = "IAM user ARN for OpenCode Bedrock access"
   value       = aws_iam_user.bedrock_opencode.arn
 }
 
