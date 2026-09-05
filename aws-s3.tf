@@ -117,6 +117,9 @@ resource "aws_s3_bucket_public_access_block" "web" {
 resource "aws_s3_bucket_policy" "web" {
   for_each = aws_s3_bucket.web
 
+  # S3 rejects a public bucket policy until this per-bucket setting is applied.
+  depends_on = [aws_s3_bucket_public_access_block.web]
+
   bucket = each.value.bucket
 
   policy = jsonencode({
