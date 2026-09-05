@@ -30,6 +30,7 @@ No modules.
 | [aws_iam_role.github_actions_channel_project_site_deploy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_channel_project_site_infrastructure](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_channel_project_state](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_iam_role.github_actions_hero_host_config_sops](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_twilio_state](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
 | [aws_iam_role.github_actions_xnoto_dev_site_deploy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
@@ -42,6 +43,7 @@ No modules.
 | [aws_iam_role_policy.github_actions_channel_project_site_log_delivery](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_channel_project_site_public_origin](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_channel_project_state](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
+| [aws_iam_role_policy.github_actions_hero_host_config_sops](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_sops_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_twilio_state](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
 | [aws_iam_role_policy.github_actions_xnoto_dev_site_deploy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy) | resource |
@@ -57,7 +59,9 @@ No modules.
 | [aws_iam_user_policy.opencode_mcp_bootstrap_assume_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy) | resource |
 | [aws_iam_user_policy.sops_secrets_operator_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy) | resource |
 | [aws_iam_user_policy_attachment.admin_attach](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy_attachment) | resource |
+| [aws_kms_alias.hero_host_config_sops](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
 | [aws_kms_alias.sops](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) | resource |
+| [aws_kms_key.hero_host_config_sops](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_kms_key.sops](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_s3_bucket.agent_pipe](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket.bedrock_batch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
@@ -105,6 +109,8 @@ No inputs.
 | <a name="output_channel_project_site_infrastructure_role_arn"></a> [channel\_project\_site\_infrastructure\_role\_arn](#output\_channel\_project\_site\_infrastructure\_role\_arn) | GitHub OIDC role for channel-project static-site OpenTofu roots |
 | <a name="output_channel_project_state_bucket_name"></a> [channel\_project\_state\_bucket\_name](#output\_channel\_project\_state\_bucket\_name) | Versioned private S3 bucket for channel-project OpenTofu state |
 | <a name="output_github_actions_sops_kms_role_arn"></a> [github\_actions\_sops\_kms\_role\_arn](#output\_github\_actions\_sops\_kms\_role\_arn) | IAM role ARN for GitHub Actions SOPS KMS access |
+| <a name="output_hero_host_config_github_actions_sops_role_arn"></a> [hero\_host\_config\_github\_actions\_sops\_role\_arn](#output\_hero\_host\_config\_github\_actions\_sops\_role\_arn) | Main-only GitHub Actions OIDC role for hero-host-config SOPS decryption |
+| <a name="output_hero_host_config_sops_kms_key_arn"></a> [hero\_host\_config\_sops\_kms\_key\_arn](#output\_hero\_host\_config\_sops\_kms\_key\_arn) | Dedicated KMS recipient for hero-host-config SOPS data |
 | <a name="output_opencode_mcp_bootstrap_access_key"></a> [opencode\_mcp\_bootstrap\_access\_key](#output\_opencode\_mcp\_bootstrap\_access\_key) | Access key for the restricted OpenCode MCP bootstrap user |
 | <a name="output_opencode_mcp_role_arn"></a> [opencode\_mcp\_role\_arn](#output\_opencode\_mcp\_role\_arn) | IAM role ARN for the managed AWS MCP Server |
 | <a name="output_sops_kms_key_arn"></a> [sops\_kms\_key\_arn](#output\_sops\_kms\_key\_arn) | KMS key ARN for future SOPS AWS KMS recipients |
