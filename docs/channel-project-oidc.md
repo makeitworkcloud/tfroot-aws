@@ -38,16 +38,22 @@ roles by event.
 
 ## Intended subsequent stages
 
-1. Update `channel-project` so pull-request plans continue with an explicitly
+1. Verify that the environment-gated reusable apply emits the exact
+   `main`-branch OIDC subject trusted by the new role. Do not weaken the trust
+   condition to a wildcard.
+2. Give the new role its own policy document with the current apply-permission
+   contract. Do this before changing the legacy role: its current policy
+   reference is intentionally temporary.
+3. Update `channel-project` so pull-request plans use the explicitly
    plan-scoped role while main applies use the new main-only apply role.
-2. After that consumer change and its main apply are verified, narrow the
-   existing any-ref role to the read and state-lock permissions required for
+4. After that consumer change and its main apply are verified, narrow the
+   legacy any-ref role to the read and state-lock permissions required for
    plans.
-3. In later separately reviewed changes, grant only the main-only apply role
+5. In later separately reviewed changes, grant only the main-only apply role
    the public-origin transfer and dynamic-index identity permissions required
    for Orthodox Channel. Do not grant those permissions to the any-ref plan
    role.
-4. Retain the separately main-only deployment role for static publication. It
+6. Retain the separately main-only deployment role for static publication. It
    must not gain OpenTofu state, infrastructure, or Hero runtime-credential
    access.
 
