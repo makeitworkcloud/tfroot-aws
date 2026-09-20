@@ -122,7 +122,7 @@ resource "aws_iam_role_policy" "opencode_mcp_secrets" {
         Effect = "Deny"
         Action = ["s3:GetObject"]
         Resource = [
-          for bucket in local.opentofu_state_guard_buckets : "arn:aws:s3:::${bucket}/*"
+          for bucket in local.s3_private_buckets : "arn:aws:s3:::${bucket}/*"
         ]
       }
     ]
