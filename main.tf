@@ -23,7 +23,6 @@ locals {
     "mitw-tf-github-repos",
     "mitw-tf-libvirt-infra",
     "mitw-tf-namecheap-infra",
-    "mitw-tf-twilio-infra",
   ])
   s3_public_buckets = toset([])
   s3_web_buckets = toset([
@@ -32,4 +31,10 @@ locals {
     "orthodox.channel",
     "xnoto.dev",
   ])
+  # State buckets the OpenCode MCP deny still guards. The retired twilio
+  # bucket stays denied until its separately confirmed stage 2 deletion.
+  opentofu_state_guard_buckets = concat(
+    [for bucket in local.s3_private_buckets : bucket],
+    [local.twilio_state_bucket],
+  )
 }

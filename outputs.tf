@@ -61,7 +61,7 @@ output "xnoto_dev_site_deploy_role_arn" {
 
 output "twilio_state_bucket_name" {
   description = "Versioned private S3 bucket for tfroot-twilio OpenTofu state"
-  value       = aws_s3_bucket.private[local.twilio_state_bucket].bucket
+  value       = aws_s3_bucket.twilio_state_retired.bucket
 }
 
 output "twilio_github_actions_state_role_arn" {
