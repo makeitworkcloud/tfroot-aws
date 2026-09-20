@@ -9,8 +9,6 @@ locals {
   channel_project_state_bucket    = "mitw-tf-channel-project"
   channel_project_site_bucket     = "orthodox-channel-site-332355796717"
   channel_project_site_log_bucket = "orthodox-channel-site-logs-332355796717"
-  twilio_state_bucket             = "mitw-tf-twilio-infra"
-  twilio_state_key                = "tofu/twilio/terraform.tfstate"
   channel_project_state_keys = toset([
     "tofu/aws/terraform.tfstate",
     "tofu/cloudflare/terraform.tfstate",
@@ -31,10 +29,4 @@ locals {
     "orthodox.channel",
     "xnoto.dev",
   ])
-  # State buckets the OpenCode MCP deny still guards. The retired twilio
-  # bucket stays denied until its separately confirmed stage 2 deletion.
-  opentofu_state_guard_buckets = concat(
-    [for bucket in local.s3_private_buckets : bucket],
-    [local.twilio_state_bucket],
-  )
 }
