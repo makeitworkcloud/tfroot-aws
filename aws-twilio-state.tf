@@ -1,8 +1,27 @@
-# tfroot-twilio receives an isolated state bucket and OIDC role. The role
-# is intentionally limited to the exact state object, its lockfile, and the
-# SOPS key required to decrypt future encrypted provider inputs.
+# Stage 1 of the tfroot-twilio state-backend retirement. The state bucket
+# moved out of the shared aws_s3_bucket.private class, which keeps
+# prevent_destroy and never sets force_destroy; only this dedicated bucket
+# becomes destroyable, and only after the move is applied. Bucket deletion
+# itself is a separately confirmed stage 2. The role is intentionally limited
+# to the exact state object, its lockfile, and the SOPS key required to
+# decrypt encrypted provider inputs, and is retained until the stage 2
+# cleanup removes it together with the bucket.
+resource "aws_s3_bucket" "twilio_state_retired" {
+  bucket        = local.twilio_state_bucket
+  force_destroy = true
+
+  tags = {
+    ManagedBy = "Terraform"
+  }
+}
+
+moved {
+  from = aws_s3_bucket.private["mitw-tf-twilio-infra"]
+  to   = aws_s3_bucket.twilio_state_retired
+}
+
 resource "aws_s3_bucket_public_access_block" "twilio_state" {
-  bucket = aws_s3_bucket.private[local.twilio_state_bucket].id
+  bucket = aws_s3_bucket.twilio_state_retired.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -11,7 +30,7 @@ resource "aws_s3_bucket_public_access_block" "twilio_state" {
 }
 
 resource "aws_s3_bucket_ownership_controls" "twilio_state" {
-  bucket = aws_s3_bucket.private[local.twilio_state_bucket].id
+  bucket = aws_s3_bucket.twilio_state_retired.id
 
   rule {
     object_ownership = "BucketOwnerEnforced"
@@ -19,7 +38,7 @@ resource "aws_s3_bucket_ownership_controls" "twilio_state" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "twilio_state" {
-  bucket = aws_s3_bucket.private[local.twilio_state_bucket].id
+  bucket = aws_s3_bucket.twilio_state_retired.id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -29,7 +48,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "twilio_state" {
 }
 
 resource "aws_s3_bucket_versioning" "twilio_state" {
-  bucket = aws_s3_bucket.private[local.twilio_state_bucket].id
+  bucket = aws_s3_bucket.twilio_state_retired.id
 
   versioning_configuration {
     status = "Enabled"
@@ -87,7 +106,7 @@ resource "aws_iam_role_policy" "github_actions_twilio_state" {
         Sid      = "ListTwilioStateBucket"
         Effect   = "Allow"
         Action   = ["s3:ListBucket"]
-        Resource = aws_s3_bucket.private[local.twilio_state_bucket].arn
+        Resource = aws_s3_bucket.twilio_state_retired.arn
       },
       {
         Sid    = "ManageTwilioStateObjects"
@@ -98,8 +117,8 @@ resource "aws_iam_role_policy" "github_actions_twilio_state" {
           "s3:DeleteObject"
         ]
         Resource = [
-          "${aws_s3_bucket.private[local.twilio_state_bucket].arn}/${local.twilio_state_key}",
-          "${aws_s3_bucket.private[local.twilio_state_bucket].arn}/${local.twilio_state_key}.tflock"
+          "${aws_s3_bucket.twilio_state_retired.arn}/${local.twilio_state_key}",
+          "${aws_s3_bucket.twilio_state_retired.arn}/${local.twilio_state_key}.tflock"
         ]
       }
     ]
