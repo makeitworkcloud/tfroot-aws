@@ -4,7 +4,8 @@ data "aws_caller_identity" "current" {}
 # role: CreateModelInvocationJob takes a roleArn that Bedrock assumes for S3
 # input/output access. The opencode user below gets iam:PassRole on it.
 resource "aws_s3_bucket" "bedrock_batch" {
-  bucket = "mitw-bedrock-batch"
+  bucket        = "mitw-bedrock-batch"
+  force_destroy = true
 
   tags = {
     ManagedBy = "Terraform"
@@ -224,5 +225,6 @@ resource "aws_iam_user_policy" "bedrock_opencode" {
 }
 
 resource "aws_iam_access_key" "bedrock_opencode" {
-  user = aws_iam_user.bedrock_opencode.name
+  user   = aws_iam_user.bedrock_opencode.name
+  status = "Inactive"
 }
