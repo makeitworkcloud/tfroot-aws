@@ -8,8 +8,8 @@ resource "aws_iam_user" "admin" {
 }
 
 resource "aws_iam_user_policy_attachment" "admin_attach" {
-  for_each   = aws_iam_user.admin
-  user       = each.value.name
+  for_each   = local.admin_users
+  user       = aws_iam_user.admin[each.key].name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
