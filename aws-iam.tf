@@ -8,8 +8,8 @@ resource "aws_iam_user" "admin" {
 }
 
 resource "aws_iam_user_policy_attachment" "admin_attach" {
-  for_each   = local.admin_users
-  user       = aws_iam_user.admin[each.key].name
+  for_each   = aws_iam_user.admin
+  user       = each.value.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
@@ -129,9 +129,7 @@ resource "aws_iam_role_policy" "opencode_mcp_secrets" {
   })
 }
 
-# The managed MCP role retains read-only discovery access and gains object
-# upload only under the dedicated artifact-delivery prefix. No state bucket is
-# writable by this policy.
+# Object uploads are limited to artifact prefixes; state buckets are not writable.
 resource "aws_iam_role_policy" "opencode_mcp_agent_pipe" {
   name = "opencode-managed-mcp-agent-pipe"
   role = aws_iam_role.opencode_mcp.name
@@ -144,6 +142,12 @@ resource "aws_iam_role_policy" "opencode_mcp_agent_pipe" {
         Effect   = "Allow"
         Action   = ["s3:PutObject"]
         Resource = "${aws_s3_bucket.agent_pipe.arn}/${local.agent_pipe_delivery_prefix}*"
+      },
+      {
+        Sid      = "WriteAgentPipePresentations"
+        Effect   = "Allow"
+        Action   = ["s3:PutObject"]
+        Resource = "${aws_s3_bucket.agent_pipe.arn}/${local.agent_pipe_presentation_prefix}*"
       }
     ]
   })

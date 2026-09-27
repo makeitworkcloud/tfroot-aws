@@ -147,9 +147,7 @@ resource "aws_s3_bucket_website_configuration" "web" {
   }
 }
 
-# agent-pipe contains only short-lived, non-secret files intended for a user to
-# download through a presigned URL. It is intentionally separate from the
-# OpenTofu state buckets listed in local.s3_private_buckets.
+# Non-secret user artifacts have prefix-specific retention, separate from state.
 resource "aws_s3_bucket" "agent_pipe" {
   bucket = local.agent_pipe_bucket
 
@@ -203,6 +201,23 @@ resource "aws_s3_bucket_lifecycle_configuration" "agent_pipe" {
 
     expiration {
       days = 1
+    }
+
+    abort_incomplete_multipart_upload {
+      days_after_initiation = 1
+    }
+  }
+
+  rule {
+    id     = "expire-agent-presentations"
+    status = "Enabled"
+
+    filter {
+      prefix = local.agent_pipe_presentation_prefix
+    }
+
+    expiration {
+      days = 90
     }
 
     abort_incomplete_multipart_upload {

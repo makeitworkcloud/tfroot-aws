@@ -6,6 +6,7 @@ locals {
   admin_users                     = toset(["svc-terraform-admin"])
   agent_pipe_bucket               = "agent-pipe"
   agent_pipe_delivery_prefix      = "deliveries/"
+  agent_pipe_presentation_prefix  = "presentations/"
   channel_project_state_bucket    = "mitw-tf-channel-project"
   channel_project_site_bucket     = "orthodox-channel-site-332355796717"
   channel_project_site_log_bucket = "orthodox-channel-site-logs-332355796717"
