@@ -27,6 +27,12 @@ resource "aws_iam_role_policy" "github_actions_channel_project_site_public_origi
         ]
         Resource = "${aws_s3_bucket.web["orthodox.channel"].arn}/*"
       },
+      {
+        Sid      = "DenyStaticPublisherDynamicIndexAccess"
+        Effect   = "Deny"
+        Action   = ["s3:*"]
+        Resource = "${aws_s3_bucket.web["orthodox.channel"].arn}/dynamic-index/*"
+      },
     ]
   })
 }
